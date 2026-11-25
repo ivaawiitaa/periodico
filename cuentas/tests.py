@@ -66,3 +66,21 @@ class PruebasRegistro(TestCase):
         usuario = get_user_model().objects.get(username="lectora")
         self.assertEqual(usuario.email, "lectora@ejemplo.mx")
         self.assertEqual(usuario.edad, 19)
+
+        get_user_model().objects.filter(username="lectora_error").exists()
+        
+    def test_registro_contrasenas_distintas_no_crea_usuario(self):
+        respuesta = self.client.post(
+            reverse("registro"),
+            {
+                "username": "lectora_error",
+                "email": "error@ejemplo.mx",
+                "edad": "22",
+                "password1": "Clave-segura-2026",
+                "password2": "Otra-clave-diferente-2026",
+            },
+        )
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertFalse(
+            get_user_model().objects.filter(username="lectora_error").exists()
+        )
