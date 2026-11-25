@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-
+from django.urls import reverse
 
 class PruebasUsuarioPersonalizado(TestCase):
     def test_crear_usuario(self):
@@ -41,4 +41,28 @@ class PruebasUsuarioPersonalizado(TestCase):
         )
         self.assertIsNone(usuario.edad)
 
-    
+class PruebasRegistro(TestCase):
+    def test_url_existe_en_ubicacion_correcta(self):
+        respuesta = self.client.get("/cuentas/registro/")
+        self.assertEqual(respuesta.status_code, 200)
+
+    def test_vista_registro(self):
+        respuesta = self.client.get(reverse("registro"))
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertTemplateUsed(respuesta, "registration/registro.html")
+
+    def test_formulario_registro(self):
+        respuesta = self.client.post(
+            reverse("registro"),
+            {
+                "username": "lectora",
+                "email": "lectora@ejemplo.mx",
+                "edad": "19",
+                "password1": "Clave-segura-2026",
+                "password2": "Clave-segura-2026",
+            },
+        )
+        self.assertRedirects(respuesta, reverse("login"))
+        usuario = get_user_model().objects.get(username="lectora")
+        self.assertEqual(usuario.email, "lectora@ejemplo.mx")
+        self.assertEqual(usuario.edad, 19)
