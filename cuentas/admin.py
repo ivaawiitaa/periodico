@@ -9,14 +9,15 @@ from .models import UsuarioPersonalizado
 class UsuarioPersonalizadoAdmin(UserAdmin):
     add_form = FormularioCreacionUsuario
     form = FormularioCambioUsuario
-    list_display = ["username", "email", "edad", "is_staff"]
-    fieldsets = UserAdmin.fieldsets + ((None, {"fields": ["edad"]}),)
+    list_display = ["username", "email", "edad", "is_staff", "ciudad"]
+    fieldsets = UserAdmin.fieldsets + ((None, {"fields": ["edad"], "fields": ["ciudad"]}),)
     add_fieldsets = (
         (
             None,
             {
                 "classes": ["wide"],
-                "fields": ["username", "email", "edad", "password1", "password2"],
+                "fields": ["username", "email", "edad", "password1", "password2", "ciudad"],
             },
         ),
     )
+    search_fields = ["username", "email"]
