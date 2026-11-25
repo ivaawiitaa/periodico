@@ -4,13 +4,15 @@
 
 {% block contenido %}
   <h1>Periódico</h1>
+  
   {% if user.is_authenticated %}
-    <p>Hola, {{ user.username }}.</p>
+    <p>Hola, {{ user.username }} ({{ user.edad }} años).</p>
     <form action="{% url 'logout' %}" method="post">
       {% csrf_token %}
       <button type="submit">Cerrar sesión</button>
     </form>
   {% else %}
+    <p>Hola, {{ user.username }}.</p>
     <p>No has iniciado sesión.</p>
     <p>
       <a href="{% url 'login' %}">Iniciar sesión</a> |
