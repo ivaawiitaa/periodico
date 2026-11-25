@@ -40,3 +40,5 @@ class PruebasUsuarioPersonalizado(TestCase):
             password="contraseña.segura.2026",
         )
         self.assertIsNone(usuario.edad)
+
+    
