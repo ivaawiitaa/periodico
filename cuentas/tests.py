@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
+
 class PruebasUsuarioPersonalizado(TestCase):
     def test_crear_usuario(self):
         Usuario = get_user_model()
@@ -41,6 +42,7 @@ class PruebasUsuarioPersonalizado(TestCase):
         )
         self.assertIsNone(usuario.edad)
 
+
 class PruebasRegistro(TestCase):
     def test_url_existe_en_ubicacion_correcta(self):
         respuesta = self.client.get("/cuentas/registro/")
@@ -68,7 +70,7 @@ class PruebasRegistro(TestCase):
         self.assertEqual(usuario.edad, 19)
 
         get_user_model().objects.filter(username="lectora_error").exists()
-        
+
     def test_registro_contrasenas_distintas_no_crea_usuario(self):
         respuesta = self.client.post(
             reverse("registro"),
@@ -84,3 +86,8 @@ class PruebasRegistro(TestCase):
         self.assertFalse(
             get_user_model().objects.filter(username="lectora_error").exists()
         )
+
+    def test_registro_con_bootstrap(self):
+        respuesta = self.client.get(reverse("registro"))
+        self.assertContains(respuesta, "bootstrap.min.css")
+        self.assertContains(respuesta, "form-control")
