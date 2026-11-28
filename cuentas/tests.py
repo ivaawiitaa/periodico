@@ -136,3 +136,16 @@ class PruebasContrasena(TestCase):
         )
         self.assertRedirects(respuesta, reverse("password_reset_done"))
         self.assertEqual(len(mail.outbox), 0)
+
+    def test_enlace_reinicio_valido_muestra_formulario(self):
+        import re
+
+        self.client.post(reverse("password_reset"), {"email": "ana@ejemplo.mx"})
+        coincidencia = re.search(r"https?://\S+/cuentas/reset/\S+", mail.outbox[0].body)
+        self.assertIsNotNone(coincidencia)
+        respuesta = self.client.get(coincidencia.group(0), follow=True)
+        self.assertContains(respuesta, "Escribe tu nueva contraseña")
+
+    def test_enlace_reinicio_invalido_muestra_alerta(self):
+        respuesta = self.client.get("/cuentas/reset/NQ/enlace-falso/", follow=True)
+        self.assertContains(respuesta, "Enlace no válido")
