@@ -144,6 +144,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 # Correo
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+PASSWORD_RESET_TIMEOUT = 3600
 
 SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=False)
 SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", default=0)
